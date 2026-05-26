@@ -1,0 +1,56 @@
+# QA Stage 3 — deploy-engineer 검증 로그
+실행일: 2026-05-26
+
+## 1) 워크플로우 파일 존재
+경로: .github/workflows/deploy.yml                              → PASS
+
+## 2) YAML 파싱
+명령: `python -c "import yaml; yaml.safe_load(open('.github/workflows/deploy.yml'))"`
+결과: 예외 없이 파싱 성공                                       → PASS
+주의: PyYAML이 `on:`을 Python boolean True로 파싱하는 알려진 현상
+      (YAML 1.1 호환). GitHub Actions 런너는 정상적으로 트리거를 인식하므로
+      배포 동작에는 무관. 보고용 메모로만 기록.
+
+## 3) 필수 블록 존재 (구조 검사)
+- on.push.branches == [main]                                   → PASS
+- on.workflow_dispatch 존재                                    → PASS
+- permissions.contents == read                                 → PASS
+- permissions.pages == write                                   → PASS
+- permissions.id-token == write                                → PASS
+- concurrency.group == "pages"                                 → PASS
+- concurrency.cancel-in-progress == false                      → PASS
+- jobs.build 존재                                              → PASS
+- jobs.deploy 존재                                             → PASS
+- jobs.deploy.needs == build                                   → PASS
+- jobs.deploy.environment.name == github-pages                 → PASS
+- jobs.deploy.environment.url == ${{ steps.deployment.outputs.page_url }}  → PASS
+
+## 4) 액션 버전 (요구사항 명시 버전과 일치)
+- actions/checkout@v4                                          → PASS (요구사항에 명시 없지만 stable)
+- actions/setup-python@v5                                      → PASS
+- actions/configure-pages@v5                                   → PASS
+- actions/upload-pages-artifact@v3                             → PASS
+- actions/deploy-pages@v4                                      → PASS
+
+## 5) build job 빌드 명령
+- pip install -r requirements.txt                              → PASS (requirements.txt 일관 참조)
+- mkdocs build --strict                                        → PASS (--strict 포함)
+- upload-pages-artifact path == "site"                         → PASS (mkdocs 기본 출력 경로와 일치)
+
+## 6) requirements.txt 경로 일관성
+- 워크플로우에서 `requirements.txt` (리포 루트) 참조           → PASS
+- 리포 루트에 requirements.txt 존재                            → PASS
+- 핀 버전 명시                                                  → PASS
+
+## 7) USER_ACTIONS.md
+경로: _workspace/USER_ACTIONS.md                                → PASS (존재)
+- 1. GitHub 리포지토리 생성                                    → 명시됨
+- 2. mkdocs.yml의 placeholder 치환 (3곳 명시)                  → 명시됨 PASS
+- 3. 로컬에서 첫 push                                          → 명시됨
+- 4. GitHub Pages 활성화 (Source = GitHub Actions)             → 명시됨
+- 5. 배포 진행 상황 확인                                       → 명시됨
+- 6. 배포된 사이트 접속 + Hypothesis 확인                      → 명시됨
+- (선택) 커스텀 도메인 + site_url 갱신 경고                    → 명시됨
+- FAQ 4건                                                      → 명시됨
+
+## Stage 3 종합 판정: PASS (전체 항목 통과)

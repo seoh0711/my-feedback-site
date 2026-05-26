@@ -1,0 +1,61 @@
+# QA Stage 1 — site-builder 검증 로그
+실행일: 2026-05-26
+실행 환경: Windows 11, Python 3.12, PowerShell
+
+## 1) mkdocs build --strict
+명령: `python -m mkdocs build --strict`
+결과: exit 0, 경고/에러 0건, 0.31s
+원본 출력:
+```
+INFO    -  Cleaning site directory
+INFO    -  Building documentation to directory: .../site
+INFO    -  Documentation built in 0.31 seconds
+```
+판정: PASS
+
+## 2) mkdocs.yml 필수 키 존재
+- site_name: "독자 피드백 사이트"                            → PASS
+- site_description 존재                                       → PASS
+- theme.name == material                                      → PASS
+- theme.language == ko                                        → PASS
+- theme.palette 라이트/다크 토글 2벌                          → PASS
+- theme.features (navigation.tabs 등 10개)                    → PASS
+- nav 4섹션 (홈 / 소개 / 글 / 피드백 안내)                    → PASS
+- markdown_extensions (admonition, attr_list, pymdownx.* 등)  → PASS
+- plugins.search.lang = [ko, en]                              → PASS
+- extra_css: [stylesheets/reading.css]                        → PASS
+- extra_javascript: 2개 항목 (hypothesis.js → embed.js)       → PASS
+판정: PASS
+
+## 3) docs/ 트리 존재 확인
+- docs/index.md                                                → PASS
+- docs/about.md                                                → PASS
+- docs/posts/index.md                                          → PASS
+- docs/posts/2026-05-26-welcome.md                             → PASS
+- docs/posts/2026-05-26-how-to-feedback.md                     → PASS
+- docs/stylesheets/reading.css                                 → PASS
+- docs/assets/js/hypothesis.js                                 → PASS
+- docs/contribute.md (placeholder 아닌 본문)                   → PASS
+판정: PASS
+
+## 4) requirements.txt 핀 버전
+파일 내용:
+- mkdocs==1.6.1
+- mkdocs-material==9.5.42
+- mkdocs-material-extensions==1.3.1
+- pymdown-extensions==10.11.2
+모든 의존성에 == 핀 명시.                                     → PASS
+
+## 5) site_url / repo_url placeholder 형식
+- site_url:  https://<YOUR_GITHUB_USERNAME>.github.io/<YOUR_REPO>/   → PASS
+- repo_url:  https://github.com/<YOUR_GITHUB_USERNAME>/<YOUR_REPO>   → PASS
+- repo_name: <YOUR_GITHUB_USERNAME>/<YOUR_REPO>                      → PASS
+요구사항대로 placeholder 형식 그대로 유지됨 (USER_ACTIONS.md 2번 단계에서 사용자가 치환).
+
+## 6) 생성된 site/ 출력물 빠른 점검
+- site/index.html에 "독자 피드백 사이트" 포함                 → PASS (한국어 깨짐 없음)
+- site/index.html에 stylesheets/reading.css 링크              → PASS
+- site/index.html에 assets/js/hypothesis.js script 태그       → PASS
+- site/index.html에 hypothes.is/embed.js script 태그          → PASS
+
+## Stage 1 종합 판정: PASS (전체 항목 통과)

@@ -1,0 +1,79 @@
+site_name: 독자 피드백 사이트
+site_description: 독자가 문단별로 의견을 남기는 텍스트 콘텐츠 사이트
+site_url: https://seoh0711.github.io/my-feedback-site
+repo_url: https://github.com/seoh0711/my-feedback-site
+repo_name: seoh0711/my-feedback-site
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  language: ko
+  font:
+    text: Noto Sans KR
+    code: JetBrains Mono
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-night
+        name: 다크 모드로 전환
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: 라이트 모드로 전환
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.top
+    - navigation.footer
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.action.edit
+    - toc.follow
+
+nav:
+  - 홈: index.md
+  - 소개: about.md
+  - 글:
+      - posts/index.md
+      - 환영합니다: posts/2026-05-26-welcome.md
+      - 피드백 사용법: posts/2026-05-26-how-to-feedback.md
+  - 피드백 안내: contribute.md
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - footnotes
+  - tables
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - toc:
+      permalink: true
+
+plugins:
+  - search:
+      lang:
+        - ko
+        - en
+
+extra_css:
+  - stylesheets/reading.css
+
+extra_javascript:
+  - assets/js/hypothesis.js
+  - https://hypothes.is/embed.js
