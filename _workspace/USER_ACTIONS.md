@@ -32,11 +32,6 @@ repo_url: https://github.com/<YOUR_GITHUB_USERNAME>/<YOUR_REPO>
 repo_name: <YOUR_GITHUB_USERNAME>/<YOUR_REPO>
 ```
 
-https://seoh0711.github.io/my-feedback-site
-https://github.com/seoh0711/my-feedback-site
-seoh0711/my-feedback-site
-
-
 예시 (사용자명이 `seoh`, 리포가 `reader-notes`인 경우):
 ```yaml
 site_url: https://seoh.github.io/reader-notes/
@@ -57,7 +52,7 @@ git init
 git add .
 git commit -m "Initial commit: MkDocs + Hypothesis 사이트"
 git branch -M main
-git remote add origin https://github.com/<당신의-사용자명>/<리포이름>.git
+git remote add origin https://github.com/seoh0711/my-feedback-site.git
 git push -u origin main
 ```
 
@@ -68,13 +63,14 @@ git push -u origin main
 
 ## 4. GitHub Pages 활성화 (Source = GitHub Actions)
 
-이게 가장 빠뜨리기 쉬운 단계입니다.
+워크플로우의 `configure-pages` 액션이 `enablement: true`로 설정되어 있어 **첫 실행 시 자동으로 활성화**됩니다. 보통 수동 단계는 불필요합니다.
 
+다만 자동 활성화가 실패하는 경우(조직 정책으로 Pages가 차단됨, 권한 부족)에는 수동으로:
 1. 리포지토리 페이지 → **Settings** 탭
 2. 좌측 메뉴에서 **Pages**
 3. **Build and deployment** → **Source** 드롭다운에서 **GitHub Actions** 선택
    - "Deploy from a branch (gh-pages)" 방식이 **아닙니다**. Actions를 골라야 합니다.
-4. 별도로 저장 버튼 없이 즉시 적용됩니다.
+4. 별도로 저장 버튼 없이 즉시 적용됩니다. 이후 Actions 탭의 실패한 실행에서 **Re-run all jobs**.
 
 ---
 
